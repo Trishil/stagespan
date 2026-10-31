@@ -23,3 +23,11 @@ The brochure links to the separately deployed workspace for sign-in and registra
 ## Assets
 
 The imagery illustrates the manufacturing story; it is not live factory telemetry. Original supplied assets and AI-generated editorial imagery were optimized for this page. Font licenses are included in `fonts/`.
+
+## Sales experience
+
+Workshop, Factory and Multi-site plans use Request a quote; no prices are promised. Quote buttons preselect the inquiry topic. The sample job panel is illustrative and never changes real factory records. The longer textile story is optional.
+
+Inquiries go to `trishilbalar92@gmail.com`. The form validates and prepares a reviewable email draft, then the visitor can open their email app or copy the inquiry. This static website does not send, store or automatically deliver inquiries. The direct email link remains available without JavaScript.
+
+Run `node --test scripts/inquiry.test.mjs` to check draft generation, recipient, encoding and validation.

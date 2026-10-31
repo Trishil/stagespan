@@ -1,3 +1,4 @@
+import { createInquiryDraft } from './inquiry-utils.mjs';
 /* Standalone brochure: no frameworks, authentication, analytics or factory-data services. */
 (() => {
   const menuButton = document.querySelector('.tf-menu-toggle');
@@ -24,7 +25,8 @@
   const mobile = matchMedia('(max-width:760px)');
   const reducedMotion = matchMedia('(prefers-reduced-motion:reduce)');
   let active = -1, scheduled = 0;
-  const cinematic = () => !mobile.matches && !reducedMotion.matches;
+  const storyDetails = document.getElementById('the-journey');
+  const cinematic = () => !mobile.matches && !reducedMotion.matches && storyDetails.open;
   function showChapter(index) {
     if (index === active) return;
     active = index;
@@ -40,6 +42,7 @@
   }
   function updateScroll() {
     scheduled = 0;
+    document.querySelector('.tf-header').classList.toggle('is-scrolled', scrollY > 24);
     if (!cinematic()) return;
     const rect = story.getBoundingClientRect();
     const viewport = story.querySelector('.tf-story-screen').clientHeight;
@@ -122,6 +125,7 @@
       document.querySelectorAll('[data-stage-label]').forEach((node, i) => { node.textContent = example.stages[i]; });
       document.getElementById('workflow-example').setAttribute('aria-labelledby', `workflow-tab-${index}`);
       tabs.forEach((tab, i) => { tab.setAttribute('aria-selected', String(i === index)); tab.tabIndex = i === index ? 0 : -1; });
+      previewStep = 0; updatePreview();
     } catch {
       document.getElementById('workflow-description').textContent = 'The sample could not load. You can still create a workspace using the link below.';
     }
@@ -134,6 +138,69 @@
       event.preventDefault(); const next = keys[event.key]; tabs[next].focus(); selectWorkflow(next);
     });
   });
+
+  let previewStep = 0;
+  const advance = document.getElementById('advance-job');
+  function updatePreview() {
+    const stages = [...document.querySelectorAll('[data-stage-label]')].map(node => node.textContent);
+    document.querySelectorAll('[data-preview-step]').forEach((node, index) => {
+      node.textContent = stages[index];
+      node.classList.toggle('is-current', index === previewStep);
+      node.classList.toggle('is-done', index < previewStep);
+      if (index === previewStep) node.setAttribute('aria-current', 'step');
+      else node.removeAttribute('aria-current');
+    });
+    document.getElementById('preview-current').textContent = stages[previewStep];
+    const badge = document.getElementById('preview-stage');
+    badge.textContent = previewStep === stages.length - 1 ? 'Ready for dispatch' : stages[previewStep];
+    badge.classList.toggle('is-ready', previewStep === stages.length - 1);
+    document.getElementById('preview-progress').style.width = `${previewStep / (stages.length - 1) * 100}%`;
+    document.getElementById('advance-label').textContent = previewStep === stages.length - 1 ? 'Start again' : `Move to ${stages[previewStep + 1]}`;
+    advance.disabled = false;
+  }
+  advance.addEventListener('click', () => { previewStep = (previewStep + 1) % 5; updatePreview(); });
+  updatePreview();
+  storyDetails.addEventListener('toggle', updateMode);
+  document.querySelectorAll('[data-open-story]').forEach(link => link.addEventListener('click', () => { storyDetails.open = true; }));
+
+  const form = document.getElementById('inquiry-form');
+  const preview = document.getElementById('inquiry-preview');
+  const error = document.getElementById('inquiry-error');
+  const preparedText = document.getElementById('inquiry-preview-text');
+  const copyStatus = document.getElementById('inquiry-copy-status');
+  function invalidateDraft() { preview.hidden = true; error.hidden = true; copyStatus.textContent = ''; }
+  form.addEventListener('input', invalidateDraft);
+  document.querySelectorAll('[data-topic]').forEach(link => link.addEventListener('click', () => {
+    document.getElementById('inquiry-topic').value = link.dataset.topic;
+    invalidateDraft();
+  }));
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    try {
+      const draft = createInquiryDraft(Object.fromEntries(new FormData(form)));
+      preparedText.value = draft.copyText;
+      document.getElementById('inquiry-mail-link').href = draft.mailto;
+      error.hidden = true; preview.hidden = false; copyStatus.textContent = '';
+      document.getElementById('inquiry-preview-title').focus({ preventScroll: true });
+      preview.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'nearest' });
+    } catch (failure) {
+      error.textContent = failure.message || 'Please check the inquiry details.';
+      error.hidden = false;
+    }
+  });
+  document.getElementById('copy-inquiry').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(preparedText.value);
+      copyStatus.textContent = 'Copied. Paste it into your email and send it when you’re ready.';
+    } catch {
+      preparedText.focus(); preparedText.select();
+      copyStatus.textContent = 'Select and copy the text above, then paste it into your email.';
+    }
+  });
+  document.getElementById('inquiry-fields').disabled = false;
+  document.querySelectorAll('a[href="#inquiry-privacy"]').forEach(link => link.addEventListener('click', () => { document.getElementById('inquiry-privacy').open = true; }));
+
   mobile.addEventListener('change', updateMode); reducedMotion.addEventListener('change', updateMode);
   updateMode();
   window.addEventListener('pagehide', () => { stopFilm(); cancelAnimationFrame(scheduled); scheduled = 0; observer.disconnect(); });
