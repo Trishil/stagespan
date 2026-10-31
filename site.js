@@ -74,23 +74,38 @@ import { createInquiryDraft } from './inquiry-utils.mjs';
   const playButton = document.getElementById('play-film');
   const hero = document.querySelector('.tf-hero');
   let video = null, filmRequested = false, heroVisible = true;
+  const media = document.getElementById('hero-media');
   function stopFilm() {
     filmRequested = false;
-    if (video) { video.pause(); video.removeAttribute('src'); video.load(); video.remove(); video = null; }
+    if (video) video.pause();
+    media.classList.remove('is-playing');
     playButton.textContent = '▷ Play the film';
     playButton.setAttribute('aria-pressed', 'false');
   }
-  playButton.addEventListener('click', async () => {
-    if (filmRequested) { stopFilm(); return; }
+  async function startFilm() {
     filmRequested = true;
-    video = document.createElement('video');
-    video.src = new URL('./assets/hero-craft-loop.mp4', document.baseURI).href;
-    video.muted = true; video.loop = true; video.playsInline = true;
-    video.setAttribute('aria-hidden', 'true');
-    video.addEventListener('error', () => { stopFilm(); playButton.textContent = 'Film unavailable — view the story below'; }, { once: true });
-    document.getElementById('hero-media').append(video);
-    playButton.textContent = 'Ⅱ Pause the film'; playButton.setAttribute('aria-pressed', 'true');
+    if (!video) {
+      video = document.createElement('video');
+      video.src = new URL('./assets/hero-craft-loop.mp4', document.baseURI).href;
+      video.muted = true; video.loop = true; video.playsInline = true;
+      video.preload = 'metadata';
+      video.setAttribute('aria-hidden', 'true');
+      video.addEventListener('playing', () => {
+        if (filmRequested && heroVisible && !document.hidden) media.classList.add('is-playing');
+      });
+      video.addEventListener('error', () => {
+        stopFilm();
+        video.remove(); video = null;
+        playButton.textContent = '▷ Retry the film';
+      });
+      media.append(video);
+    }
+    playButton.textContent = 'Ⅱ Pause the film';
+    playButton.setAttribute('aria-pressed', 'true');
     try { await video.play(); } catch { stopFilm(); }
+  }
+  playButton.addEventListener('click', () => {
+    if (filmRequested) stopFilm(); else startFilm();
   });
   const observer = new IntersectionObserver(([entry]) => {
     heroVisible = entry.isIntersecting;
@@ -104,6 +119,12 @@ import { createInquiryDraft } from './inquiry-utils.mjs';
     if (document.hidden) video.pause();
     else if (heroVisible && filmRequested) video.play().catch(stopFilm);
   });
+  function autoStartFilm() {
+    // Let the poster and page load first; preserve explicit motion/data preferences.
+    if (!reducedMotion.matches && !navigator.connection?.saveData && heroVisible && !document.hidden) startFilm();
+  }
+  if (document.readyState === 'complete') autoStartFilm();
+  else window.addEventListener('load', autoStartFilm, { once: true });
 
   const tabs = [...document.querySelectorAll('[data-workflow]')];
   // The three illustrative examples are tiny local data, loaded only if selected.

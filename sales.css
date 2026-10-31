@@ -12,3 +12,8 @@ html{scroll-padding-top:0}.tf-sales section[id]{scroll-margin-top:20px}.tf-sales
 /* Comfortable reading and native-size form controls on phones. */
 .tf-start-steps p,.tf-plan>p,.tf-plan li,.tf-inquiry-copy>p:not(.tf-eyebrow),.tf-faq-list p{font-size:14px;line-height:1.8}
 @media(max-width:760px){.tf-form-field input,.tf-form-field select,.tf-form-field textarea{font-size:16px}.tf-faq-list summary{font-size:15px}.tf-plan li,.tf-start-steps p,.tf-plan>p,.tf-inquiry-copy>p:not(.tf-eyebrow),.tf-faq-list p{font-size:14px}}
+
+/* Keep the image visible until the first video frame, then crossfade both ways. */
+.tf-hero-media video{opacity:0;transition:opacity 1.2s ease;will-change:opacity}
+.tf-hero-media.is-playing video{opacity:1}
+@media(prefers-reduced-motion:reduce){.tf-hero-media video{transition:none}}

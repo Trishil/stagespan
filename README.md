@@ -2,9 +2,9 @@
 
 Public client-facing site: https://trishil.github.io/textflow/
 
-Workspace: https://trishil.github.io/Udhna-factory-management-2/?experience=workspace
+Workspace: https://trishil.github.io/textflow-workspace/?experience=workspace
 
-This is an independent, buildless HTML/CSS/JavaScript site. It does not import the factory ERP, React, Firebase, spreadsheet tools, authentication code or application data. The film is opt-in. Website content remains readable without JavaScript. Fonts and responsive images are self-hosted.
+This is an independent, buildless HTML/CSS/JavaScript site. It does not import the factory ERP, React, Firebase, spreadsheet tools, authentication code or application data. The muted film starts after page loading, with a crossfade from its poster. Reduced-motion and data-saving preferences keep the still image; autoplay rejection leaves the play control available. Website content remains readable without JavaScript. Fonts and responsive images are self-hosted.
 
 ## Local preview
 
@@ -12,7 +12,7 @@ Run `python3 -m http.server 3013 --bind 127.0.0.1` in this directory, then open 
 
 ## Checks
 
-Run `python3 scripts/check_site.py` and `node --check site.js`. The checks enforce a 15 KB JavaScript budget, no initial video element, valid local assets, fonts and anchors.
+Run `python3 scripts/check_site.py` and `node --check site.js`. The checks enforce a 15 KB JavaScript budget, no blocking initial video element, valid local assets, fonts and anchors.
 
 ## Publishing
 
