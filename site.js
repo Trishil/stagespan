@@ -109,19 +109,19 @@ import { createInquiryDraft } from './inquiry-utils.mjs';
   });
   const observer = new IntersectionObserver(([entry]) => {
     heroVisible = entry.isIntersecting;
-    if (!video) return;
+    if (!video) { autoStartFilm(); return; }
     if (heroVisible && filmRequested && !document.hidden) video.play().catch(stopFilm);
     else video.pause();
   }, { threshold: 0.1 });
   observer.observe(hero);
   document.addEventListener('visibilitychange', () => {
-    if (!video) return;
+    if (!video) { autoStartFilm(); return; }
     if (document.hidden) video.pause();
     else if (heroVisible && filmRequested) video.play().catch(stopFilm);
   });
   function autoStartFilm() {
     // Let the poster and page load first; preserve explicit motion/data preferences.
-    if (!reducedMotion.matches && !navigator.connection?.saveData && heroVisible && !document.hidden) startFilm();
+    if (document.readyState === 'complete' && !reducedMotion.matches && !navigator.connection?.saveData && heroVisible && !document.hidden) startFilm();
   }
   if (document.readyState === 'complete') autoStartFilm();
   else window.addEventListener('load', autoStartFilm, { once: true });
