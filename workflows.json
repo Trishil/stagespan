@@ -1,0 +1,41 @@
+[
+  {
+    "label": "Textiles",
+    "title": "A textile journey, connected.",
+    "description": "From fabric inward to the final fold. Start with a textile template, then make the stages your own.",
+    "unit": "Pieces \u00b7 metres \u00b7 rolls",
+    "stages": [
+      "Fabric inward",
+      "Embroidery",
+      "Inspection",
+      "Packing",
+      "Dispatch"
+    ]
+  },
+  {
+    "label": "Furniture",
+    "title": "A different craft. The same clarity.",
+    "description": "Materials, assembly and finishing. Give your workshop a process that reflects the way your team works.",
+    "unit": "Individual items \u00b7 batches",
+    "stages": [
+      "Materials",
+      "Cutting",
+      "Assembly",
+      "Finishing",
+      "Dispatch"
+    ]
+  },
+  {
+    "label": "Your process",
+    "title": "Your stages. Your way of working.",
+    "description": "Start with a blank workflow. Name the stages, choose your units and decide where inspection belongs.",
+    "unit": "Choose your measurement units",
+    "stages": [
+      "Your intake",
+      "Your production",
+      "Your inspection",
+      "Your finish",
+      "Your handover"
+    ]
+  }
+]
