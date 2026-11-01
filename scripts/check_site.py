@@ -12,7 +12,7 @@ class Page(HTMLParser):
   for key in ['src','href']:
    if a.get(key):self.refs.append(a[key])
   if a.get('srcset'):self.refs.extend(part.strip().split()[0] for part in a['srcset'].split(','))
-  if tag=='script':self.scripts.append(a.get('src'))
+  if tag=='script' and a.get('type')!='application/ld+json':self.scripts.append(a.get('src'))
   if tag=='video':self.videos+=1
 page=Page();page.feed((root/'index.html').read_text())
 for value in page.refs:

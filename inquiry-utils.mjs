@@ -13,8 +13,8 @@ export function createInquiryDraft(fields) {
   const message = String(fields.message || '').replace(/\r\n?/g, '\n').trim();
   if (message.length > 1000) throw new Error('Please keep your message within 1,000 characters.');
   const topic = INQUIRY_TOPICS.includes(fields.topic) ? fields.topic : 'General inquiry';
-  const subject = `Textflow — ${topic} — ${company}`;
-  const body = `Hello Trishil,\n\nI’m interested in Textflow for my factory.\n\nName: ${name}\nEmail: ${email}\nCompany: ${company}\nInterested in: ${topic}\n\n${message || 'Please contact me to discuss the next steps.'}\n\nThank you,\n${name}`;
+  const subject = `StageSpan — ${topic} — ${company}`;
+  const body = `Hello Trishil,\n\nI’m interested in StageSpan for my factory.\n\nName: ${name}\nEmail: ${email}\nCompany: ${company}\nInterested in: ${topic}\n\n${message || 'Please contact me to discuss the next steps.'}\n\nThank you,\n${name}`;
   return {
     recipient: CONTACT_EMAIL, subject, body,
     mailto: `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,

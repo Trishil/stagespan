@@ -1,8 +1,8 @@
-# Textflow — independent brochure website
+# StageSpan Website
 
-Public client-facing site: https://trishil.github.io/textflow/
+Public client-facing site: https://trishil.github.io/stagespan/
 
-Workspace: https://trishil.github.io/textflow-workspace/?experience=workspace
+Workspace: https://trishil.github.io/stagespan-workspace/?experience=workspace
 
 This is an independent, buildless HTML/CSS/JavaScript site. It does not import the factory ERP, React, Firebase, spreadsheet tools, authentication code or application data. The muted film starts after page loading, with a crossfade from its poster. Reduced-motion and data-saving preferences keep the still image; autoplay rejection leaves the play control available. Website content remains readable without JavaScript. Fonts and responsive images are self-hosted.
 
@@ -22,7 +22,7 @@ The brochure links to the separately deployed workspace for sign-in and registra
 
 ## Assets
 
-The imagery illustrates the manufacturing story; it is not live factory telemetry. Original supplied assets and AI-generated editorial imagery were optimized for this page. Font licenses are included in `fonts/`.
+The imagery illustrates the manufacturing story; it is not live factory telemetry. Editorial imagery is optimized for this page. Font licenses are included in `fonts/`.
 
 ## Sales experience
 
